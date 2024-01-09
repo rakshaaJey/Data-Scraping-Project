@@ -5,10 +5,15 @@ import constants
 import time
 
 class Case:
-    def __init__(self, name, price, num_mil_spec_grade = 0, num_restricted = 0, num_classified = 0, num_covert = 0, weapon_list = []):
+    def __init__(self, name, price, num_mil_spec_grade = 0, num_restricted = 0, num_classified = 0, num_covert = 0, 
+                    weapon_list = []):
         """
         @param name represents the name of the case
         @param price represents the price of the case
+        @param num_mil_spec_grade represents the number of weapons in the case that have a rarity of mil spec grade
+        @param num_restricted represents the number of weapons in the case that have a rarity of restricted
+        @param num_classified represents the number of weapons in the case that have a rarity of classified
+        @param num_covert represents the number of weapons in the case that have a rarity of covert
         @param weapon_list represents a list of weapons you can get in the case
         """
 
@@ -34,15 +39,23 @@ class Case:
         return self.price   
     
     def get_num_mil_spec_grade(self):
+        """ get_num_mil_spec_grade() returns the number of mil spec grade weapons you can get from the case
+        """
         return self.num_mil_spec_grade  
 
     def get_num_restricted(self):
+        """ get_num_restricted() returns the number of restricted weapons you can get from the case
+        """
         return self.num_restricted 
 
     def get_num_classified(self):
+        """ get_num_classified() returns the number of classified weapons you can get from the case
+        """
         return self.num_classified 
     
     def get_num_covert(self):
+        """ get_num_covert() returns the number of covert weapons you can get from the case
+        """
         return self.num_covert
     
     def get_weapon_list(self):
@@ -246,7 +259,7 @@ def to_weapon(skin_name: str, price: str) -> Weapon:
     return Weapon(skin_name, is_stattrack, ware, float(price))
 
 def get_weapon_data(skin: str, rarity: str) -> list:
-    """ get_weapon_data(skin), rarity compiles a list of the skins of different rarities, wares and prices of a 
+    """ get_weapon_data(skin, rarity) compiles a list of the skins of different rarities, wares and prices of a 
     selected skin line
 
     @param skin is the name of the skin
@@ -284,8 +297,17 @@ def get_weapon_data(skin: str, rarity: str) -> list:
 
     return weapon_list
 
-def get_weapon_case(case_name: str, num_mil_spec_grade: int, num_restricted: int, num_classified: int, num_covert: int) -> Case:
+def get_weapon_case(case_name: str, num_mil_spec_grade: int, num_restricted: int, num_classified: int, 
+                        num_covert: int) -> Case:
+    """ get_weapon_case(case_name, num_mil_spec_grade, num_restricted, num_classified, num_covert) returns the
+    all the data related to the case using data from the steam web page
 
+    @param case_name represents the name of the case 
+    @param num_mil_spec_grade represents the number of mil spec grade items there are in the case
+    @param num_restricted represents the number of weapons in the case that have a rarity of restricted
+    @param num_classified represents the number of weapons in the case that have a rarity of classified
+    @param num_covert represents the number of weapons in the case that have a rarity of covert
+    """
     resp = urllib3.request("GET", "https://steamcommunity.com/market/search?appid=730&q="+ name_to_url(case_name))
 
     soup = BeautifulSoup(resp.data, 'html.parser')
@@ -305,6 +327,11 @@ def get_weapon_case(case_name: str, num_mil_spec_grade: int, num_restricted: int
         get_weapon_case(case_name)
 
 def get_case(case_name: str) -> Case:
+    """ get_case(case_name) returns all data related to the case including weapon data using data from the 
+    steam web page
+
+    @param case_name is the name of the case
+    """
     case_data = open("CS-GO Probabilities\Cases\\"+ case_name +".txt", "r").read()
 
     num_mil_spec_grade = case_data.count(constants.MIL_SPEC_GRADE)
@@ -334,6 +361,11 @@ def get_case(case_name: str) -> Case:
     return my_case 
 
 def get_case_expected_value(case: Case) -> int:
+    """ def get_case_expected_value(case) returns the expected value of the return you would recive if you were
+    to open the case
+
+    @param Case represents the case in which you want to find the expected value of
+    """
     expected_value = 0
     for current_weapon in case.get_weapon_list():
         probability = 1
