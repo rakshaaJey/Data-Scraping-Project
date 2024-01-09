@@ -332,7 +332,7 @@ def get_case(case_name: str) -> Case:
 
     @param case_name is the name of the case
     """
-    case_data = open("CS-GO Probabilities\Cases\\"+ case_name +".txt", "r").read()
+    case_data = open(case_name +".txt", "r").read()
 
     num_mil_spec_grade = case_data.count(constants.MIL_SPEC_GRADE)
     num_restricted = case_data.count(constants.RESTRICTED)
@@ -341,7 +341,7 @@ def get_case(case_name: str) -> Case:
 
     my_case = get_weapon_case(case_name, num_mil_spec_grade, num_restricted, num_classified, num_covert)
     
-    case_lines = open("CS-GO Probabilities\Cases\\"+ case_name +".txt", "r").readlines()
+    case_lines = open(case_name +".txt", "r").readlines()
 
     for line in case_lines:
         if line.find(constants.MIL_SPEC_GRADE) != -1:
